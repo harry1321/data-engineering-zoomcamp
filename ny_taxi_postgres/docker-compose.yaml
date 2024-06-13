@@ -1,0 +1,33 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ny_taxi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_python/data:/app/postgres_python/data
+      - postgres-db-volume:/var/lib/postgresql/data:rw
+    networks:
+      - postgres-sql
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-sql
+
+volumes:
+  postgres-db-volume:
+
+networks:
+  postgres-sql:
